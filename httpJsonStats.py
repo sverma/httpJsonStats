@@ -44,7 +44,7 @@ def constructURLs ( jsonStr = None ) :
 
 
 def main(): 
-  CARBON_SERVER = 'serenity.directi.com'
+  CARBON_SERVER = 'carbonServer.directi.com'
   CARBON_PORT = 2003
   delay = 20 
   if len(sys.argv) > 1:
