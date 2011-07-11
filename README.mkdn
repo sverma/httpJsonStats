@@ -1,0 +1,29 @@
+httpJsonStats
+=============
+httpJsonStats is a script to parse key/value pairs out of Json output from a web url and format it for the [Graphite](http://graphite.wikidot.com) input. 
+
+Example Lets say we have URL which outputs a json format stats for a application 
+
+    # curl http://webserver1.domain.com:9090/context/stats.sessions.all
+    {"running":31,"total":1683,"total_time":14243815942,"average_time":"02:23:42"}
+
+similarly We can have other servers also which output in similar format
+
+It accepts a json config to form proper urls , parse them , construct key value pairs and send it to Graphite server , Example Config is Below 
+
+    { "chirkut": 
+      {
+          "host": "webserver1.domain.com,webserver2.domain.com",
+          "port": "9090",
+          "groups": {
+              "packet_stats": {
+                  "URN": "/context/stats.all"
+              },
+          }
+      }
+    }
+
+Run The httpJsonStats.py script command from command line and put it in background , It will send Metrics Every 10secs To graphite Server
+
+
+
