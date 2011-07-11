@@ -1,0 +1,12 @@
+{ "chirkut": 
+  {
+      "host": "server3.somechat.pw,server4.somechat.pw",
+      "port": "9090",
+      "groups": {
+          "packet_stats": {
+              "URN": "/context/stats.all"
+          },
+      }
+  }
+}
+
