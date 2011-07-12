@@ -1,12 +1,17 @@
-{ "chirkut": 
-  {
-      "host": "server3.somechat.pw,server4.somechat.pw",
-      "port": "9090",
-      "groups": {
-          "packet_stats": {
-              "URN": "/context/stats.all"
-          },
-      }
-  }
-}
+{
+	"global": { 
+		"GRAPHITE_SERVER" : "someserver.somecomp.com", 
+		"GRAPHITE_PORT"	  : 2003,
+		"INTERVAL"		  : 20, 
+	}, 
 
+    "chirkut": {
+        "host": "server3.somecomp.com",
+        "port": "9090",
+        "groups": {
+            "packet_stats": {
+                "URN": "/context/stats.all"
+            }
+        }
+    }
+}
