@@ -9,28 +9,38 @@ from daemon import Daemon
 
 class httpJsonStats(Daemon):
 
-  def __init__ (self , configLoc , pidfile = "/tmp/httpJsonStats.pid" , stdin='/dev/null', stdout='/dev/null', stderr='/dev/null' ): 
+  def __init__ (self , configLoc , pidfile = "/tmp/httpJsonStats.pid" , stdin='/dev/null', stdout='/tmp/http.log', stderr='/tmp/http.err' ): 
     self.configLoc = configLoc
     self._jsonStr = "" 
     self._CARBON_SERVER = "server.domain.com"
     self._CARBON_PORT = 2003
     self._delay = 20
-    Daemon.__init__(self, pidfile)
-
-
-  def _evaluateConfig (self) : 
-    f = open ( self.configLoc , 'r' ) 
-    self._jsonStr = json.load(f) 
+    self._stdin = stdin 
+    self._stdout = stdout 
+    self._stderr = stderr 
+    self._pidfile = pidfile
+    self._evaluateConfig()
     if self._jsonStr["global"]["GRAPHITE_SERVER"]:
       self._CARBON_SERVER = self._jsonStr["global"]["GRAPHITE_SERVER"]
     if self._jsonStr["global"]["GRAPHITE_PORT"]:
       self._CARBON_PORT = self._jsonStr["global"]["GRAPHITE_PORT"]
     if self._jsonStr["global"]["INTERVAL"]:
       self._delay =  self._jsonStr["global"]["INTERVAL"]
+    if self._jsonStr["global"]["LOG_FILE"]:
+      self._stdout =  self._jsonStr["global"]["LOG_FILE"]
+    if self._jsonStr["global"]["ERR_LOG_FILE"]:
+      self._stderr =  self._jsonStr["global"]["ERR_LOG_FILE"]
+    if self._jsonStr["global"]["PID_FILE"]:
+      self._pidfile =  self._jsonStr["global"]["PID_FILE"]
     del self._jsonStr["global"]
+    Daemon.__init__(self , self._pidfile,self._stdin,self._stdout,self._stderr) 
 
+
+  def _evaluateConfig (self) : 
+    f = open ( self.configLoc , 'r' ) 
+    self._jsonStr = json.load(f) 
+    
   def getMetrics ( self) : 
-    self._evaluateConfig()
     appGroupsToUrls = {} 
     lines = [] 
     for app,attrs in self._jsonStr.iteritems(): 
@@ -81,7 +91,7 @@ class httpJsonStats(Daemon):
       time.sleep(self._delay)
 
 if __name__ == "__main__":
-  statsOb = httpJsonStats("./config.json" )
+  statsOb = httpJsonStats("/home/saurabh.ve/httpJsonStats/config.json" )
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       statsOb.start()
@@ -96,4 +106,3 @@ if __name__ == "__main__":
   else:
     print "usage: %s start|stop|restart" % sys.argv[0]
     sys.exit(2)
-
