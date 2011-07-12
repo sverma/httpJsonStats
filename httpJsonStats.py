@@ -84,7 +84,7 @@ if __name__ == "__main__":
   statsOb = httpJsonStats("./config.json" )
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
-      statsOb.run()
+      statsOb.start()
     elif 'stop' == sys.argv[1]:
       statsOb.stop()
     elif 'restart' == sys.argv[1]:
