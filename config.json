@@ -1,4 +1,3 @@
-# Example Config 
 {
   "global": { 
     "GRAPHITE_SERVER" : "YOUR_GRAPHITE_SERVER", 
