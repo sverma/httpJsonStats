@@ -44,15 +44,16 @@ Above config will Form URLs as below
 
 
 server1.some.com:9090/context/stats.all
+
 server2.some.com:9090/context/stats.all
 
-and Sends stats to graphite accroding to key/value pairs output by above URLs. 
+and Sends stats to graphite according to key/value pairs output by above URLs. 
 
 The Graphite naming scheme it create is as follows 
 
 chirkut.packet_stats.<HOSTNAME> 
 
-You can view a screenshot for further clarification , (https://github.com/sverma/httpJsonStats/raw/master/screenshots/screenshot1.png "SCREENSHOT")
+You can view a screenshot for further clarification , ![SCREENSHOT](https://github.com/sverma/httpJsonStats/raw/master/screenshots/screenshot1.png "SCREENSHOT")
 
 
 Installation 
