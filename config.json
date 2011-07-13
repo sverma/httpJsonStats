@@ -1,17 +1,29 @@
+# Example Config 
 {
-	"global": { 
-		"GRAPHITE_SERVER" : "someserver.somecomp.com", 
-		"GRAPHITE_PORT"	  : 2003,
-		"INTERVAL"		  : 20, 
-	}, 
+  "global": { 
+    "GRAPHITE_SERVER" : "YOUR_GRAPHITE_SERVER", 
+    "GRAPHITE_PORT"   : 2003,
+    "INTERVAL"      : 20, 
+        "LOG_FILE"       : "/tmp/httpJsonStats.log", 
+        "ERR_LOG_FILE"   : "/tmp/httpJsonStats.log", 
+        "PID_FILE"       : "/tmp/httpJsonStats.pid"
+  }, 
+ "chirkut": 
+  {
+      "host": "server1.some.com,server2.some.com",
+      "port": "9090",
+      "groups": {
+          "packet_stats": {
+              "URN": "/context/stats.all"
+          },
+          "Stream_Aggregated_Stats": {
+              "URN": "/context/stats.streams.all"
+          },
+          "Stream_Aggregated_Sessions": {
+              "URN": "/context/stats.sessions.all"
+          }
 
-    "chirkut": {
-        "host": "server3.somecomp.com",
-        "port": "9090",
-        "groups": {
-            "packet_stats": {
-                "URN": "/context/stats.all"
-            }
-        }
-    }
+      }
+  }
+
 }
