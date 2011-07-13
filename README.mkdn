@@ -11,19 +11,51 @@ similarly We can have other servers also which output in similar format
 
 It accepts a json config to form proper urls , parse them , construct key value pairs and send it to Graphite server , Example Config is Below 
 
-    { "chirkut": 
+    {
+      "global": { 
+        "GRAPHITE_SERVER" : "YOUR_GRAPHITE_SERVER", 
+        "GRAPHITE_PORT"   : 2003,
+        "INTERVAL"      : 20, 
+            "LOG_FILE"       : "/tmp/httpJsonStats.log", 
+            "ERR_LOG_FILE"   : "/tmp/httpJsonStats.log", 
+            "PID_FILE"       : "/tmp/httpJsonStats.pid"
+      }, 
+     "chirkut": 
       {
-          "host": "webserver1.domain.com,webserver2.domain.com",
+          "host": "server1.some.com,server2.some.com",
           "port": "9090",
           "groups": {
               "packet_stats": {
                   "URN": "/context/stats.all"
               },
+              "Stream_Aggregated_Stats": {
+                  "URN": "/context/stats.streams.all"
+              },
+              "Stream_Aggregated_Sessions": {
+                  "URN": "/context/stats.sessions.all"
+              }
+
           }
       }
+
     }
 
-Run The httpJsonStats.py script command from command line and put it in background , It will send Metrics Every 10secs To graphite Server
+Above config will Form URLs as below 
 
 
+server1.some.com:9090/context/stats.all
+server2.some.com:9090/context/stats.all
 
+and Sends stats to graphite accroding to key/value pairs output by above URLs. 
+
+The Graphite naming scheme it create is as follows 
+
+chirkut.packet_stats.<HOSTNAME> 
+
+You can view a screenshot for further clarification , (https://github.com/sverma/httpJsonStats/raw/master/screenshots/screenshot1.png "SCREENSHOT")
+
+
+Installation 
+============
+
+TODO
