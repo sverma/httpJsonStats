@@ -5,7 +5,9 @@ import sys
 import time 
 import os
 import re
+import logging
 from daemon import Daemon
+
 
 class httpJsonStats(Daemon):
 
@@ -81,12 +83,12 @@ class httpJsonStats(Daemon):
     sock.sendall(message)
 
   def run(self):  
+    logging.basicConfig(format='%(asctime)s %(message)s' , level=logging.INFO)
     while True:
       message = self.getMetrics()
-      print "sending message\n"
-      print '-' * 80
-      print message
-      print
+      logging.info ("sending message") 
+      logging.info(message)
+
       self.sendMetrics(message)
       time.sleep(self._delay)
 
@@ -99,10 +101,12 @@ if __name__ == "__main__":
       statsOb.stop()
     elif 'restart' == sys.argv[1]:
       statsOb.restart()
+    elif 'debug' == sys.argv[1]:
+      statsOb.run()
     else:
       print "Unknown command"
       sys.exit(2)
     sys.exit(0)
   else:
-    print "usage: %s start|stop|restart" % sys.argv[0]
+    print "usage: %s start|stop|restart|debug" % sys.argv[0]
     sys.exit(2)
