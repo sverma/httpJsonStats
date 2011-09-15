@@ -43,32 +43,45 @@ class httpJsonStats(Daemon):
     self._jsonStr = json.load(f) 
     
   def getMetrics ( self) : 
-    appGroupsToUrls = {} 
     lines = [] 
     for app,attrs in self._jsonStr.iteritems(): 
+      groupNamesToUrls = {} 
       hostL = attrs["host"] 
       hosts = hostL.split(',')
       for host in hosts:
-        URL = "http://" + host
-        if ( attrs["port"] ) : 
-          URL = "http://" + host + ':' + attrs['port'] 
+        tempURL = ""
         for groupName,value in attrs["groups"].iteritems(): 
+          if "port" in value.keys() : 
+              tempURL = "http://" + host + ':' + value["port"]
+          else : 
+              tempURL = "http://" + host + ':' + attrs['port'] 
+          URI = ""
+          URL = tempURL 
           type = groupName
           URI = URL + value["URN"] 
           temp = groupName
-          appGroupsToUrls[temp] = URI
-        for appGroup,URL in appGroupsToUrls.iteritems() : 
+          groupNamesToUrls[temp] = URI
+          filter = "" 
+          if 'filter' in value.keys():
+            filter = value["filter"] 
           metricJson = ""
           try :
-            req = urllib2.Request( url = URL ) 
+            req = urllib2.Request( url = URI ) 
             metricJson = urllib2.urlopen(req) 
           except Exception , e:
-            print "Couldn't open the URL :" , URL , " "  , e
+            logging.info ( "Couldn't open the URL : " +  URI ) 
           metricsDict = json.load(metricJson) 
           for metric,value in metricsDict.iteritems(): 
             now = int( time.time() )
-            hostFormatted = re.sub(r'\.', '-', host) 
-            lines.append("%s.%s.%s.%s %s %d"%(app,appGroup,hostFormatted,metric,value,now))
+            hostFormatted = re.sub(r'\.', '_', host) 
+            if ( filter == "" ) : 
+              logging.info("Collecting data from  " + groupName + " without applying any filter " ) 
+              lines.append("%s.%s.%s.%s %s %d"%(app,hostFormatted,groupName,metric,value,now))
+            elif ( ( filter ) ) : 
+              p = re.compile(filter, re.IGNORECASE)
+              if ( p.match(metric) ) : 
+                logging.info("Collecting data from  " + groupName + " applying filter " + filter )
+                lines.append("%s.%s.%s.%s %s %d"%(app,hostFormatted,groupName,metric,value,now)) 
     message = '\n'.join(lines) + '\n'
     return message
 
@@ -79,7 +92,7 @@ class httpJsonStats(Daemon):
       sock.connect( (self._CARBON_SERVER , self._CARBON_PORT) )
     except:
       print "Couldn't connect to %(server)s on port %(port)d, is carbon-agent.py running?" % { 'server':self._CARBON_SERVER, 'port':self._CARBON_PORT }
-      sys.exit(1)
+      return  
     sock.sendall(message)
 
   def run(self):  

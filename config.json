@@ -1,6 +1,6 @@
 {
   "global": { 
-    "GRAPHITE_SERVER" : "YOUR_GRAPHITE_SERVER", 
+    "GRAPHITE_SERVER" : "metrics.centralserver.com", 
     "GRAPHITE_PORT"   : 2003,
     "INTERVAL"      : 20, 
         "LOG_FILE"       : "/tmp/httpJsonStats.log", 
@@ -9,7 +9,7 @@
   }, 
  "chirkut": 
   {
-      "host": "server1.some.com,server2.some.com",
+      "host": "server3.somedomain.com,server4.somedomain.com",
       "port": "9090",
       "groups": {
           "packet_stats": {
@@ -23,6 +23,43 @@
           }
 
       }
-  }
+  },
 
+  "pappu": 
+  { 
+    "host": "xmpp1.somedomain.com,xmpp2.somedomain.com",
+    "port": "8778" , 
+    "groups": { 
+       "NonHeapMemoryUsageUsed": { 
+            "URN": "/jolokia/read/java.lang:type=Memory/NonHeapMemoryUsage/used" , 
+            "filter": "value"
+        } , 
+        "connectedEntities": {
+          "URN": "/stats/connectedEntities.json", 
+          "port" : "8080"
+        } , 
+
+       "NonHeapMemoryUsageCommitted": {
+            "URN": "/jolokia/read/java.lang:type=Memory/NonHeapMemoryUsage/committed" ,
+            "filter": "value"
+        } ,
+       "HeapMemoryUsageUsed": {
+            "URN": "/jolokia/read/java.lang:type=Memory/HeapMemoryUsage/used" ,
+            "filter": "value"
+        } ,
+       "HeapMemoryUsageUsed": {
+            "URN": "/jolokia/read/java.lang:type=Memory/HeapMemoryUsage/committed" ,
+            "filter": "value"
+        } ,
+       "GcCollectionPS-Scavange" : { 
+            "URN" : "/jolokia/read/java.lang:type=GarbageCollector,name=PS%20Scavenge/CollectionCount" , 
+            "filter" : "value"
+        } , 
+        "GcCollectionPS-MarkSweep" : { 
+            "URN": "/jolokia/read/java.lang:type=GarbageCollector,name=PS%20MarkSweep/CollectionCount", 
+            "filter": "value" 
+        }
+ 
+    } 
+  }  
 }
