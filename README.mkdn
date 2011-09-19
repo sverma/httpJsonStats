@@ -55,7 +55,7 @@ chirkut.packet_stats.<HOSTNAME>
 
 
 
-You can filter particular keys from a json response . 
+You can filter particular keys from a json response . "filter" can be a regular expression 
 Example : 
 
        "NonHeapMemoryUsageUsed": { 
@@ -65,6 +65,7 @@ Example :
 
 You can also override port config for a particular group . 
 Example: 
+
         "connectedEntities": {
           "URN": "/stats/connectedEntities.json", 
           "port" : "8080"
