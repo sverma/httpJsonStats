@@ -51,7 +51,7 @@ and Sends stats to graphite according to key/value pairs output by above URLs.
 
 The Graphite naming scheme it create is as follows 
 
-chirkut.packet_stats.<HOSTNAME> 
+chirkut.packet_stats.\<HOSTNAME\>.
 
 
 
