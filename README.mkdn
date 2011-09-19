@@ -53,10 +53,28 @@ The Graphite naming scheme it create is as follows
 
 chirkut.packet_stats.<HOSTNAME> 
 
+
+
+You can filter particular keys from a json response . 
+Example : 
+
+       "NonHeapMemoryUsageUsed": { 
+            "URN": "/jolokia/read/java.lang:type=Memory/NonHeapMemoryUsage/used" , 
+            "filter": "value"
+        } , 
+
+You can also override port config for a particular group . 
+Example: 
+        "connectedEntities": {
+          "URN": "/stats/connectedEntities.json", 
+          "port" : "8080"
+        } , 
+
+
 You can view a screenshot for further clarification , ![SCREENSHOT](https://github.com/sverma/httpJsonStats/raw/master/screenshots/screenshot1.png "SCREENSHOT")
-
-
 Installation 
 ============
 
 TODO
+
+

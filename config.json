@@ -1,15 +1,15 @@
 {
   "global": { 
-    "GRAPHITE_SERVER" : "metrics.centralserver.com", 
+    "GRAPHITE_SERVER" : "metrics.talkto.com", 
     "GRAPHITE_PORT"   : 2003,
     "INTERVAL"      : 20, 
-        "LOG_FILE"       : "/tmp/httpJsonStats.log", 
-        "ERR_LOG_FILE"   : "/tmp/httpJsonStats.log", 
-        "PID_FILE"       : "/tmp/httpJsonStats.pid"
+        "LOG_FILE"       : "/var/log/httpJsonStats.log", 
+        "ERR_LOG_FILE"   : "/var/log/httpJsonStats.log", 
+        "PID_FILE"       : "/var/run/httpJsonStats.pid"
   }, 
  "chirkut": 
   {
-      "host": "server3.somedomain.com,server4.somedomain.com",
+      "host": "server3.pwchat.com,server4.pwchat.com",
       "port": "9090",
       "groups": {
           "packet_stats": {
@@ -27,7 +27,7 @@
 
   "pappu": 
   { 
-    "host": "xmpp1.somedomain.com,xmpp2.somedomain.com",
+    "host": "xmpp1.pwchat.com,xmpp2.pwchat.com",
     "port": "8778" , 
     "groups": { 
        "NonHeapMemoryUsageUsed": { 

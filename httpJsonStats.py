@@ -11,7 +11,7 @@ from daemon import Daemon
 
 class httpJsonStats(Daemon):
 
-  def __init__ (self , configLoc , pidfile = "/tmp/httpJsonStats.pid" , stdin='/dev/null', stdout='/tmp/http.log', stderr='/tmp/http.err' ): 
+  def __init__ (self , configLoc , pidfile = "/tmp/httpJsonStats.pid" , stdin='/dev/null', stdout='/tmp/httpJson.log', stderr='/tmp/httpJson.log' ): 
     self.configLoc = configLoc
     self._jsonStr = "" 
     self._CARBON_SERVER = "server.domain.com"
@@ -64,6 +64,10 @@ class httpJsonStats(Daemon):
           filter = "" 
           if 'filter' in value.keys():
             filter = value["filter"] 
+            logging.info("Collecting data from  " + groupName + " applying filter " + "'" + filter + "'" )
+          else : 
+            logging.info("Collecting data from  " + groupName + " without applying any filter " ) 
+            
           metricJson = ""
           try :
             req = urllib2.Request( url = URI ) 
@@ -75,15 +79,12 @@ class httpJsonStats(Daemon):
             now = int( time.time() )
             hostFormatted = re.sub(r'\.', '_', host) 
             if ( filter == "" ) : 
-              logging.info("Collecting data from  " + groupName + " without applying any filter " ) 
               lines.append("%s.%s.%s.%s %s %d"%(app,hostFormatted,groupName,metric,value,now))
             elif ( ( filter ) ) : 
               p = re.compile(filter, re.IGNORECASE)
               if ( p.match(metric) ) : 
-                logging.info("Collecting data from  " + groupName + " applying filter " + filter )
                 lines.append("%s.%s.%s.%s %s %d"%(app,hostFormatted,groupName,metric,value,now)) 
-    message = '\n'.join(lines) + '\n'
-    return message
+    return lines
 
 
   def sendMetrics (self , message):
@@ -102,18 +103,23 @@ class httpJsonStats(Daemon):
       logging.info ("sending message") 
       logging.info(message)
 
+      message = '\n'.join(message) + '\n'
       self.sendMetrics(message)
       time.sleep(self._delay)
 
 if __name__ == "__main__":
-  statsOb = httpJsonStats("/home/saurabh.ve/httpJsonStats/config.json" )
+  statsOb = httpJsonStats("config.json" )
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       statsOb.start()
+      print "Daemon Started \n"  
     elif 'stop' == sys.argv[1]:
       statsOb.stop()
+      print "Daemon Stopped \n"  
+      
     elif 'restart' == sys.argv[1]:
       statsOb.restart()
+      print "Daemon restarted \n"
     elif 'debug' == sys.argv[1]:
       statsOb.run()
     else:
