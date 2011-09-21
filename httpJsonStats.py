@@ -108,6 +108,10 @@ class httpJsonStats(Daemon):
       time.sleep(self._delay)
 
 if __name__ == "__main__":
+  # Check whether root or not 
+  if not os.geteuid() == 0 : 
+    print "Daemon has to run as superuser : please use sudo" 
+    sys.exit(1)
   statsOb = httpJsonStats("config.json" )
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
