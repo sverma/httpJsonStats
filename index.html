@@ -1,1 +1,79 @@
-My test Page
+<h1>httpJsonStats</h1>
+
+<p>httpJsonStats is a script to parse key/value pairs out of Json output from a web url and format it for the <a href="http://graphite.wikidot.com">Graphite</a> input. </p>
+
+<p>Example Lets say we have URL which outputs a json format stats for a application </p>
+
+<pre><code># curl http://webserver1.domain.com:9090/context/stats.sessions.all
+{"running":31,"total":1683,"total_time":14243815942,"average_time":"02:23:42"}
+</code></pre>
+
+<p>similarly We can have other servers also which output in similar format</p>
+
+<p>It accepts a json config to form proper urls , parse them , construct key value pairs and send it to Graphite server , Example Config is Below </p>
+
+<pre><code>{
+  "global": { 
+    "GRAPHITE_SERVER" : "YOUR_GRAPHITE_SERVER", 
+    "GRAPHITE_PORT"   : 2003,
+    "INTERVAL"      : 20, 
+        "LOG_FILE"       : "/tmp/httpJsonStats.log", 
+        "ERR_LOG_FILE"   : "/tmp/httpJsonStats.log", 
+        "PID_FILE"       : "/tmp/httpJsonStats.pid"
+  }, 
+ "chirkut": 
+  {
+      "host": "server1.some.com,server2.some.com",
+      "port": "9090",
+      "groups": {
+          "packet_stats": {
+              "URN": "/context/stats.all"
+          },
+          "Stream_Aggregated_Stats": {
+              "URN": "/context/stats.streams.all"
+          },
+          "Stream_Aggregated_Sessions": {
+              "URN": "/context/stats.sessions.all"
+          }
+
+      }
+  }
+
+}
+</code></pre>
+
+<p>Above config will Form URLs as below </p>
+
+<p>server1.some.com:9090/context/stats.all</p>
+
+<p>server2.some.com:9090/context/stats.all</p>
+
+<p>and Sends stats to graphite according to key/value pairs output by above URLs. </p>
+
+<p>The Graphite naming scheme it create is as follows </p>
+
+<p>chirkut.packet_stats.\<HOSTNAME\>.</p>
+
+<p>You can filter particular keys from a json response . "filter" can be a regular expression 
+Example : </p>
+
+<pre><code>   "NonHeapMemoryUsageUsed": { 
+        "URN": "/jolokia/read/java.lang:type=Memory/NonHeapMemoryUsage/used" , 
+        "filter": "value"
+    } , 
+</code></pre>
+
+<p>You can also override port config for a particular group . 
+Example: </p>
+
+<pre><code>    "connectedEntities": {
+      "URN": "/stats/connectedEntities.json", 
+      "port" : "8080"
+    } , 
+</code></pre>
+
+<p>You can view a screenshot for further clarification , <img src="https://github.com/sverma/httpJsonStats/raw/master/screenshots/screenshot1.png" alt="SCREENSHOT" title="SCREENSHOT" /></p>
+
+<h1>Installation</h1>
+
+<p>TODO</p>
